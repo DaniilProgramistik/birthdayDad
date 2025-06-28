@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #9affc4, #ff977b);
+            background: linear-gradient(135deg, #9affc4, #34b5ff);
             height: 100vh;
             margin: 0;
             display: flex;
@@ -23,7 +23,7 @@
             max-width: 500px;
         }
         h1 {
-            color: #d23669;
+            color: #244cff;
         }
         button {
             background: #4CAF50;
@@ -47,16 +47,55 @@
         <button onclick="confetti()">Нажми для праздника!</button>
     </div>
 
-    <!-- Добавляем конфетти -->
+  <!-- Подключаем библиотеку конфетти -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        function confetti() {
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-            alert("Пусть этот день будет самым счастливым! 🥳");
+        function startConfetti() {
+            var duration = 15 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { 
+                startVelocity: 30, 
+                spread: 360, 
+                ticks: 60, 
+                zIndex: 0 
+            };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                // Конфетти слева
+                confetti({ 
+                    ...defaults, 
+                    particleCount, 
+                    origin: { 
+                        x: randomInRange(0.1, 0.3), 
+                        y: Math.random() - 0.2 
+                    } 
+                });
+                // Конфетти справа
+                confetti({ 
+                    ...defaults, 
+                    particleCount, 
+                    origin: { 
+                        x: randomInRange(0.7, 0.9), 
+                        y: Math.random() - 0.2 
+                    } 
+                });
+            }, 250);
+
+            // Добавляем всплывающее сообщение
+            setTimeout(() => {
+                alert("Пусть этот год будет самым счастливым! 🥳");
+            }, 2000);
         }
     </script>
 </body>
